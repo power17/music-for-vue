@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-    <listview :data="singers"></listview>
+    <listview :data="singers" @select="selectSinger"></listview>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -10,6 +11,8 @@
   import {getSingerList} from 'api/singer'
   import Singer from 'common/js/singer'
   import Listview from 'base/listview/listview'
+  //  引入vuex
+  import {mapMutations} from 'vuex'
 
   const HOT_NAME = '热门'
   const HOT_SINGER_LENGTH = 10
@@ -23,6 +26,14 @@
       this._getSingList()
     },
     methods: {
+      selectSinger(singer) {
+        // 跳转路由
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+        // 存入歌手数据
+        this.setSinger(singer)
+      },
       // 获取歌手数据
       _getSingList() {
         getSingerList().then((res) => {
@@ -84,8 +95,12 @@
         })
         // 连接数组
         return hot.concat(ret)
-      }
+      },
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     },
+
     components: {
       Listview
     }

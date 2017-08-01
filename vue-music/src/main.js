@@ -3,6 +3,7 @@ import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 // 懒加载
 import VueLazyLoad from 'vue-lazyload'
 
@@ -24,5 +25,6 @@ import 'common/stylus/index.styl'
 new Vue({
   el: '#app',
   render: h => h(App),
+  store,
   router
 })

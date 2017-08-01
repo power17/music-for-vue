@@ -8,7 +8,7 @@
       <li v-for="group in data" class="list-group" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.items" class="list-group-item">
+          <li @click="selectItem(item)" v-for="item in group.items" class="list-group-item">
             <img v-lazy="item.avatar" class="avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -81,6 +81,10 @@
 
     },
     methods: {
+      // 跳转到歌手页面
+      selectItem(item) {
+        this.$emit('select', item)
+      },
       // 根据字母跳转
       onShortutTouchStart(e) {
         // 获取dom的数据

@@ -22,7 +22,7 @@ export function getData(el, name, val) {
 }
 
 let elementStyle = document.createElement('div').style
-
+// css兼容性处理
 let vendor = (() => {
   let transformNames = {
     webkit: 'webkitTransform',
