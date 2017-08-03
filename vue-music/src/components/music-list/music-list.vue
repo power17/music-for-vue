@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div class="play" v-show="songs.length>0" ref="playBtn">
+        <div @click="random" class="play" v-show="songs.length>0" ref="playBtn">
           <i class="icon-play"></i>
           <span class="text">随机播放</span>
         </div>
@@ -17,7 +17,10 @@
     <scroll @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll" :data="songs" class="list"
             ref="list">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs"></song-list>
+      </div>
+      <div class="loading-contailer" v-show="!songs.length">
+        <loading></loading>
       </div>
     </scroll>
   </div>
@@ -26,8 +29,12 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import SongList from 'base/song-list/song-list'
+  import loading from 'base/loading/loading'
+  import {mapActions} from 'vuex'
+  import {playlistMixin} from 'common/js/mixin'
   const RESERVER_HEIGHT = 40
   export default {
+    mixins: [playlistMixin],
     props: {
       bgImage: {
         type: String,
@@ -62,13 +69,34 @@
       this.$refs.list.$el.style.top = `${this.$refs.bgImage.clientHeight}px`
     },
     methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
+      },
       scroll(pos) {
         // 获取位置
         this.scrollY = pos.y
       },
+      // 返回
       back() {
         this.$router.back()
-      }
+      },
+      selectItem(item, index) {
+        this.selectPlay({
+          list: this.songs,
+          index
+        })
+      },
+      random() {
+        this.randomPlay({
+          list: this.songs
+        })
+      },
+      ...mapActions([
+        'selectPlay',
+        'randomPlay'
+      ])
     },
     watch: {
       scrollY(newY) {
@@ -106,7 +134,8 @@
     },
     components: {
       Scroll,
-      SongList
+      SongList,
+      loading
     }
   }
 </script>

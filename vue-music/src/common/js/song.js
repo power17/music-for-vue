@@ -1,6 +1,7 @@
-// import {getLyric} from 'api/song'
-// import {ERR_OK} from 'api/config'
-// import {Base64} from 'js-base64'
+import {getLyric} from 'api/song'
+import {ERR_OK} from 'api/config'
+import {Base64} from 'js-base64'
+
 export default class Song {
   // 根据歌曲信息创建歌曲类
   constructor({id, mid, singer, name, album, duration, image, url}) {
@@ -14,11 +15,10 @@ export default class Song {
     this.url = url
   }
 
-  /* getLyric() {
+  getLyric() {
     if (this.lyric) {
       return Promise.resolve(this.lyric)
     }
-
     return new Promise((resolve, reject) => {
       getLyric(this.mid).then((res) => {
         if (res.retcode === ERR_OK) {
@@ -29,8 +29,9 @@ export default class Song {
         }
       })
     })
-  } */
+  }
 }
+
 // 歌曲信息的工厂方法
 export function createSong(musicData) {
   return new Song({
@@ -45,6 +46,7 @@ export function createSong(musicData) {
     url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
   })
 }
+
 //  过滤歌手
 function filterSinger(singer) {
   let ret = []
